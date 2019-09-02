@@ -1,6 +1,6 @@
 import React from 'react';
-import TodoList from './components/TodoComponents/TodoList';
-import TodoForm from './components/TodoComponents/TodoForm';
+import TodoList from './components/TodoComponents/TodoList.js';
+import TodoForm from './components/TodoComponents/TodoForm.js';
 
 const todoData = [
   {
@@ -26,28 +26,46 @@ class App extends React.Component {
     };
   }
 
+  filterCompleted = () => {
+    this.setState({
+      todos: this.state.todos.filter(todo => {
+        return !todo.completed;
+      })
+    });
+  }
+
   toggleCompleted = (id) => {
     console.log('toggleCompleted', id);
-    this.setState({ 
-      todos: 
-    this.state.todos.map(todo => {
-      if (id === todo.id) {
-      return {...todo, completed: !todo.completed};
-      } else {
-        return todo;
-      }
-    })
+    this.setState({
+      todos: this.state.todos.map(todo => {
+        if (id === todo.id) {
+          return {...todo, completed: !todo.completed};
+        } else {
+          return todo;
+        }
+      })
+    });
+  }
+
+  addTodo = task => {
+    this.setState({
+      todos: [...this.state.todos, {
+        task: task,
+        id: Date.now(),
+        completed: false
+      }]
     });
   };
-  
+
   render() {
     console.log(this.state);
     return (
       <div>
         <h2>Welcome to your Todo App!</h2>
-        <TodoList todos={this.state.todos} 
-        toggleCompleted={this.toggleCompleted} />
-        <TodoForm />
+        <TodoList todos={this.state.todos}
+                  toggleCompleted={this.toggleCompleted}
+        />
+        <TodoForm addTodo={this.addTodo} filterTodos={this.filterCompleted} />
       </div>
     );
   }
